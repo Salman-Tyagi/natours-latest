@@ -24,7 +24,7 @@ dotenv.config({ path: 'config.env' });
 const app = express();
 
 // Global middlewares
-app.use(helmet());
+// app.use(helmet());
 
 app.set('view engine', 'ejs');
 app.set('views', path.resolve('views'));
