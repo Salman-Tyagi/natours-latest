@@ -5,9 +5,8 @@ import catchAsync from '../utils/catchAsync.js';
 import Booking from '../models/bookingModel.js';
 import * as factory from '../controllers/handlerFactory.js';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-
 export const getCheckoutSession = catchAsync(async (req, res) => {
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
   // Get the purchased tour
   const tour = await Tour.findById(req.params.tourId);
 
@@ -26,7 +25,9 @@ export const getCheckoutSession = catchAsync(async (req, res) => {
           product_data: {
             name: tour.name,
             description: tour.summary,
-            images: ['http://www.natours.dev/img/tours/tour-2-cover.jpg'],
+            images: [
+              `https://natours-app-okgw.onrender.com/img/tours/${tour.imageCover}`,
+            ],
           },
         },
         quantity: 1,
@@ -53,14 +54,15 @@ export const getCheckoutSession = catchAsync(async (req, res) => {
 
 const createBookingSession = async session => {
   const tour = session.client_reference_id;
-  const user = await User.findOne({ email: session.customer_email });
+  const user = (await User.findOne({ email: session.customer_email })).id;
   const price = session.line_items[0].price_data.unit_amount / 100;
 
   await Booking.create({ tour, user, price });
 };
 
 export const webhookCheckout = (req, res) => {
-  const signature = req.headers['stripe-signatur'];
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+  const signature = req.headers['stripe-signature'];
 
   let event;
   try {
