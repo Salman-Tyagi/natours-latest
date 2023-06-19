@@ -7,6 +7,8 @@ import mongoSanitize from 'express-mongo-sanitize';
 import limit from 'express-rate-limit';
 import hpp from 'hpp';
 import cookieParser from 'cookie-parser';
+import compression from 'compression';
+import cors from 'cors';
 
 import viewRouter from './routes/viewRoutes.js';
 import tourRouter from './routes/tourRoutes.js';
@@ -29,6 +31,10 @@ app.set('views', path.resolve('views'));
 
 // Body-parser, reading data from the req.body object
 app.use(express.json({ limit: '10kb' }));
+
+app.use(cors());
+
+app.options('*', cors());
 
 app.use(mongoSanitize());
 
@@ -59,6 +65,8 @@ app.use(cookieParser());
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
+
+app.use(compression());
 
 // Testing middlewares
 app.use((req, res, next) => {

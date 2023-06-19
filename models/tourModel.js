@@ -188,7 +188,7 @@ tourSchema.pre(/^find/, function (next) {
 // Post Query hook / Post Query Middleware
 tourSchema.post(/^find/, function (docs, next) {
   // console.log(docs);
-  console.log(`Query took ${Date.now() - this.start} milliseconds!`);
+  // console.log(`Query took ${Date.now() - this.start} milliseconds!`);
   next();
 });
 
