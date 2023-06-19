@@ -1,0 +1,58 @@
+import Stripe from 'stripe';
+import Tour from '../models/tourModel.js';
+import catchAsync from '../utils/catchAsync.js';
+import Booking from '../models/bookingModel.js';
+import * as factory from '../controllers/handlerFactory.js';
+
+export const getCheckoutSession = catchAsync(async (req, res) => {
+  // Get the purchased tour
+  const tour = await Tour.findById(req.params.tourId);
+
+  // Create a checkout session
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ['card'],
+    success_url: `${req.protocol}://${req.get('host')}/?tour=${
+      req.params.tourId
+    }&user=${req.user.id}&price=${tour.price}`,
+    cancel_url: `${req.protocol}://${req.get('host')}/`,
+    customer_email: req.user.email,
+    client_reference_id: req.params.tourId,
+    line_items: [
+      {
+        price_data: {
+          unit_amount: tour.price * 100,
+          currency: 'usd',
+          product_data: {
+            name: tour.name,
+            description: tour.summary,
+            images: ['http://www.natours.dev/img/tours/tour-2-cover.jpg'],
+          },
+        },
+        quantity: 1,
+      },
+    ],
+    mode: 'payment',
+  });
+
+  // Send the session as response
+  res.status(200).json({
+    status: 'success',
+    session,
+  });
+});
+
+// This is temporary
+export const createBookingSession = catchAsync(async (req, res, next) => {
+  const { tour, user, price } = req.query;
+  if (!tour && !user && !price) return next();
+
+  await Booking.create({ tour, user, price });
+  res.redirect(`${req.originalUrl.split('?')[0]}my-tours`);
+});
+
+export const getAllBookings = factory.getAll(Booking);
+export const getBooking = factory.getOne(Booking);
+export const createBooking = factory.createOne(Booking);
+export const updateBooking = factory.updateOne(Booking);
+export const deleteBooking = factory.deleteOne(Booking);
