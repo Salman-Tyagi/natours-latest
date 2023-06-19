@@ -18,6 +18,7 @@ import bookingRouter from './routes/bookingRoutes.js';
 import globalErrorHandler from './controllers/globalErrorHandler.js';
 import AppError from './utils/appError.js';
 import * as authController from './controllers/authController.js';
+import * as bookingController from './controllers/bookingController.js';
 
 dotenv.config({ path: 'config.env' });
 
@@ -28,6 +29,12 @@ const app = express();
 
 app.set('view engine', 'ejs');
 app.set('views', path.resolve('views'));
+
+app.post(
+  '/webhookChechout',
+  express.raw({ type: 'application/json' }),
+  bookingController.webhookCheckout
+);
 
 // Body-parser, reading data from the req.body object
 app.use(express.json({ limit: '10kb' }));
