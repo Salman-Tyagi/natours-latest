@@ -30,7 +30,7 @@ process.on('unhandledRejection', err => {
   });
 });
 
-process.on('SIGTERM', () => {
-  console.log('SIGTERM received, app is shutting down gracefully');
-  server.close(() => console.log('Server closed'));
-});
+// process.on('SIGTERM', () => {
+//   console.log('SIGTERM received, app is shutting down gracefully');
+//   server.close(() => console.log('Server closed'));
+// });
