@@ -31,7 +31,7 @@ app.set('view engine', 'ejs');
 app.set('views', path.resolve('views'));
 
 app.post(
-  '/webhookChechout',
+  '/webhookCheckout',
   express.raw({ type: 'application/json' }),
   bookingController.webhookCheckout
 );

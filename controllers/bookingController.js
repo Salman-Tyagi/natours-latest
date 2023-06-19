@@ -25,9 +25,7 @@ export const getCheckoutSession = catchAsync(async (req, res) => {
           product_data: {
             name: tour.name,
             description: tour.summary,
-            images: [
-              `https://natours-app-okgw.onrender.com/img/tours/${tour.imageCover}`,
-            ],
+            images: [`https://www.natours.dev/img/tours/${tour.imageCover}`],
           },
         },
         quantity: 1,
