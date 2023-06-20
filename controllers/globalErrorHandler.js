@@ -41,6 +41,7 @@ const sendErrorDev = (err, req, res) => {
   else {
     res.status(err.statusCode).render('error', {
       msg: err.message,
+      title: 'Page not found',
       user: req.user,
     });
   }

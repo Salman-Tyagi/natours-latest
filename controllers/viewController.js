@@ -23,12 +23,20 @@ export const getTour = catchAsync(async (req, res, next) => {
   res.status(200).render('tour', {
     tour,
     user: req.user,
+    title: `${tour.name} Tour`,
   });
 });
 
 export const getLoginForm = (req, res) => {
   res.status(200).render('login', {
     title: 'Log into your account',
+    user: req.user,
+  });
+};
+
+export const getSignupForm = (req, res) => {
+  res.status(200).render('signup', {
+    title: 'Create new account',
     user: req.user,
   });
 };

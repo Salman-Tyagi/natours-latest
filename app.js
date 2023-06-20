@@ -25,7 +25,29 @@ dotenv.config({ path: 'config.env' });
 const app = express();
 
 // Global middlewares
-// app.use(helmet());
+// app.use(
+//   helmet.contentSecurityPolicy({
+//     directives: {
+//       defaultSrc: ["'self'"],
+//       scriptSrc: [
+//         "'self'",
+//         'https://unpkg.com',
+//         'https://tile.openstreetmap.org',
+//       ],
+//       imageSrc: [
+//         // "'self'",
+//         'https://unpkg.com',
+//         'https://tile.openstreetmap.org',
+//       ],
+//     },
+//   })
+// );
+
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+  })
+);
 
 app.set('view engine', 'ejs');
 app.set('views', path.resolve('views'));
