@@ -9,10 +9,8 @@ export const login = async (email, password) => {
     });
 
     if (res.data.status === 'success') {
-      showAlert('success', 'Logged in successfully!');
-      window.setTimeout(() => {
-        location.assign('/');
-      }, 1500);
+      setTimeout(() => showAlert('success', 'Logged in successfully!'), 500);
+      setTimeout(() => location.assign('/'), 1500);
     }
   } catch (err) {
     showAlert('error', err.response.data.message);
@@ -22,7 +20,10 @@ export const login = async (email, password) => {
 export const logout = async (req, res) => {
   try {
     const res = await axios.get('/api/v1/users/logout');
-    if (res.data.status === 'success') location.assign('/');
+    if (res.data.status === 'success') {
+      showAlert('success', `You're logging out...`);
+      setTimeout(() => location.assign('/'), 1000);
+    }
   } catch (err) {
     showAlert('error', 'Error in logging out! Try again later.');
   }

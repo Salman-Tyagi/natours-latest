@@ -1,5 +1,6 @@
 import nodemailer from 'nodemailer';
-import sendgridTransport from 'nodemailer-sendgrid-transport';
+// import sendgridTransport from 'nodemailer-sendgrid-transport';
+// import sendMail from '@sendgrid/mail';
 import path from 'path';
 import ejs from 'ejs';
 import { convert } from 'html-to-text';
@@ -14,13 +15,14 @@ export default class Email {
 
   newTransport() {
     if (process.env.NODE_ENV === 'production') {
-      return nodemailer.createTransport(
-        sendgridTransport({
-          auth: {
-            api_key: process.env.SENDGRID_API_KEY,
-          },
-        })
-      );
+      return nodemailer.createTransport({
+        host: smtp.sendgrid.net,
+        port: 25 || 587,
+        auth: {
+          user: process.env.SENDGRID_USER,
+          pass: process.env.SENDGRID_API_KEY,
+        },
+      });
     }
     return nodemailer.createTransport({
       host: process.env.EMAIL_HOST,

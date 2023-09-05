@@ -20,16 +20,20 @@ export const upload = multer({
   fileFilter: multerFilter,
 });
 
-export const uploadTourImages = upload.fields([
-  { name: 'imageCover', maxCount: 1 },
-  { name: 'images', maxCount: 3 },
-]);
+export const uploadTourImages = (req, res, next) => {
+  upload.fields([
+    { name: 'imageCover', maxCount: 1 },
+    { name: 'images', maxCount: 3 },
+  ]);
+
+  next();
+};
 
 // upload.single('image')  req.file
 // upload.arrays('images', 5) req.files
 
 export const resizeTourImages = catchAsync(async (req, res, next) => {
-  if (!req.files.imageCover || !req.files.images) return next();
+  if (!req.files?.imageCover || !req.files?.images) return next();
 
   // imageCover
   req.body.imageCover = `tour-${req.user.id}-${Date.now()}-cover.jpeg`;

@@ -14,8 +14,11 @@ export const updateSettings = async (data, type) => {
     });
 
     if (res.data.status === 'success') {
-      showAlert('success', `${type.toUpperCase()} updated successfully!`);
-      location.assign('/myAccount');
+      showAlert(
+        'success',
+        `${type.at(0).toUpperCase() + type.slice(1)} updated successfully!`
+      );
+      setTimeout(() => location.assign('/myAccount'), 1500);
     }
   } catch (err) {
     showAlert('error', err.response.data.message);
