@@ -7,7 +7,7 @@
   "scripts": {
     "start": "nodemon server.js",
     "pro": "NODE_ENV=production nodemon server.js",
-    "build": "webpack --config webpack.config.js"
+    "build": "webpack --config webpack.config.js --watch"
   },
   "author": "",
   "license": "ISC",
